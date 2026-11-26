@@ -1,0 +1,2 @@
+import SolvedConjectures.SymmetricSpiders.Leg5
+import SolvedConjectures.SymmetricSpiders.General

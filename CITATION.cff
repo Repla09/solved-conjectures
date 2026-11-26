@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+title: "Solved conjectures"
+authors:
+  - family-names: Garib
+    given-names: Alpar
+repository-code: "https://github.com/Repla09/solved-conjectures"
+license: Apache-2.0
+date-released: 2026-11-27
+keywords:
+  - graceful labeling
+  - 0-rotatable trees
+  - Lean 4
