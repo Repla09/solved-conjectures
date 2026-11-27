@@ -41,7 +41,7 @@ Census (graphs up to isomorphism; the last three columns show how each edge-mini
 | 11 | 868,311 | 2,516 | 2,493 | 15 | 8 |
 
 ```sh
-brew install nauty   # or apt install nauty
+brew install nauty   # on Debian/Ubuntu: apt install nauty, where geng is called nauty-geng
 cd results/backbite-dirac/scripts
 for n in 3 4 5 6 7 8 9 10 11; do python3 verify_dirac.py $n; done
 python3 verify_moves.py

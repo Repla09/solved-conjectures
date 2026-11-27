@@ -20,6 +20,8 @@ jobs:
       - name: Backbite checks
         run: |
           sudo apt-get update && sudo apt-get install -y nauty
+          mkdir -p "$HOME/bin" && ln -sf "$(command -v nauty-geng || command -v geng)" "$HOME/bin/geng"
+          export PATH="$HOME/bin:$PATH"
           cd results/backbite-dirac/scripts
           for n in 3 4 5 6 7 8 9; do python3 verify_dirac.py $n; done
           python3 verify_moves.py
