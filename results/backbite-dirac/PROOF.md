@@ -1,0 +1,93 @@
+# Backbite connectivity above the Dirac threshold
+
+**Theorem.** For every fixed $\varepsilon>0$ there is an $n_0(\varepsilon)$ such that every simple graph $G$ on $n\ge n_0(\varepsilon)$ vertices with $\delta(G)\ge(1/2+\varepsilon)n$ has connected Hamiltonian-path reconfiguration graph $R(G)$.
+
+This proves the asymptotic version of Kazazi's Conjecture 7.8. Together with his disconnected examples at $\lfloor n/2\rfloor-3$, it determines the limiting minimum-degree ratio as $1/2$. The exact Dirac threshold remains open here. The proof first builds a bounded set of vertices on which connectivity can be proved by Euler tours. It then adds the remaining vertices one at a time. The finite checks in [README.md](README.md) are independent of the asymptotic proof. [Kazazi, *Connectivity of the reconfiguration graph of Hamiltonian paths*](https://arxiv.org/html/2610.05068v1)
+
+## 1. Paths, cycles, and a spanning Dirac subgraph
+
+All paths and cycles are unoriented. Say that a path *represents* a Hamiltonian cycle if it is obtained by cutting one edge of the cycle. All cuts of a given cycle belong to the same component of $R(G)$. Indeed, a backbite between the two endpoints restores the cut edge and cuts the next edge around the cycle. Thus it makes sense to speak of the component of a cycle. This is the cycle rotation used in Kazazi's paper. [Kazazi, Section 2](https://arxiv.org/html/2610.05068v1#S2)
+
+A valid cycle 2-opt move also preserves the component. Write the two cut edges in cyclic order as $ab,cd$, with new edges $ac,bd$. Start with the cut $C-ab$ and traverse it from $a$ toward $b$. Biting from $a$ to $c$ deletes $dc$, and the resulting path is a cut of the new cycle at $bd$. We will use this also as a reversal of an interval of a cyclic vertex order when its new boundary edges exist. A reversal with no effect on the unoriented cycle needs no move.
+
+**Lemma 1 (closure and descent).** Suppose $H\subseteq J$ is a spanning subgraph on $m\ge3$ vertices with $\delta(H)\ge m/2$. Every Hamiltonian path of $J$ reaches a Hamiltonian path of $H$ in $R(J)$. In particular, connectivity of $R(H)$ implies connectivity of $R(J)$.
+
+Write the current path as $p_1\ldots p_m$, with $x=p_1$ and $y=p_m$. If $xy\in E(H)$ its ends can already be closed. Otherwise consider the indices $1\le i<m$ with $xp_{i+1}\in E(H)$ and those with $yp_i\in E(H)$. Their intersection has size at least
+
+$$d_H(x)+d_H(y)-(m-1)\ge1.$$
+
+For any such $i$ the two indicated edges reconnect the path across the cut $p_ip_{i+1}$ into a cycle. In detail, a backbite from $x$ to $p_{i+1}$ removes $p_ip_{i+1}$ and leaves the closing edge $p_i y$. The symmetric backbite from $y$ gives a different cut of the same cycle. Since $xy\notin H$, neither extreme index is a witness, so both backbites are legal.
+
+Count path edges outside $H$. The preliminary backbite adds an $H$-edge and cannot increase the count. If the count has not fallen and is positive, close using the indicated $H$-edge and move the cut of that cycle to an outside edge. The resulting path has one fewer outside edge than before. Iterate. In the special case $H=J$, every path therefore represents a cycle after at most one backbite. Existence of a Hamiltonian cycle in a Dirac graph is Dirac's theorem (or use the same index count on a longest path and extend its cycle if it is not spanning).
+
+**An exact-threshold family.** Suppose $G$ is Dirac and has a spanning $K_{\lfloor n/2\rfloor,\lceil n/2\rceil}$. Then $R(G)$ is connected. For $n=2h$, a cycle of $K_{h,h}$ alternates between its parts. Reversing three consecutive vertices interchanges two successive vertices of one part and fixes the order of the other part. All boundary edges exist. These reversals generate every permutation within each part of the alternating cyclic order. For $h=2$ the cycle is unique, and $h=1$ is immediate. Apply Lemma 1 to the bipartite graph and to its supergraphs.
+
+For $n=2h+1$, write $A,B$ for the parts of sizes $h,h+1$. Delete all edges within $A$, obtaining a spanning Dirac graph $H$. Each Hamiltonian cycle of $H$ has precisely one edge within $B$, since its $2h$ incidences at $A$ account for $2h$ cross edges. Cutting the remaining edge gives an alternating spanning path. All such paths are connected using cross edges alone. In the order $B,A,B,\ldots,A,B$, reversing a prefix of length $2k-1$ reverses the first $k$ entries from $B$ and the first $k-1$ entries from $A$. For $1\le k\le h+1$ this is an identity, an allowed backbite to the following $A$-vertex, or reversal of the entire path, which is free. The operation $k=2$ swaps the first two $B$-entries alone. Conjugating it by the operation for each $k\ge2$ swaps $B$-entries $k-1,k$ alone. We can consequently undo the $B$-effect of any prefix reversal, leaving all prefix reversals of the $A$-entries available. These generate every permutation in $A$. This argument with oriented lists descends to unoriented paths, including the whole-list reversal. Lemma 1 finishes the proof for $H$ and $G$.
+
+This family includes every Dirac graph with an independent set of size $\lfloor n/2\rfloor$, since every vertex of that set must see the entire opposite part. At even orders it includes the triangle-free $K_{h,h}$, where a spanning squared path is impossible for $h\ge2$.
+
+## 2. Adding a vertex
+
+**Lemma 2.** Let $H$ have $m\ge3$ vertices, $\delta(H)\ge(m+2)/2$, and $R(H)$ connected. Add a vertex $v$ with at least $(m+3)/2$ neighbours in $H$ to obtain $J$. Then $R(J)$ is connected.
+
+A *lift* of a path $P$ of $H$ inserts $v$ between consecutive neighbours of $v$, or appends $v$ to an endpoint adjacent to it. We show first that all lifts of a fixed $P$ lie in one component.
+
+Fix a cycle $C$ in $H$. Consider paths obtained by cutting $C$ and appending $v$ to one endpoint. All such paths are connected to one another. To see this, write one as $v p_0p_1\ldots p_{m-1}$ in cyclic order on $C$. A bite from $p_{m-1}$ to $p_0$ changes the direction of travel around $C$ while retaining the attachment $vp_0$. To move the attachment to any other neighbour $p_j$ of $v$, bite from $v$ to $p_j$, deleting $p_{j-1}p_j$. Now bite from $p_{m-1}$ to $p_0$, deleting $vp_0$. This leaves $v$ attached to $p_j$ and the cut at $p_{j-1}p_j$. These formulas include $j=1$ and $j=m-1$. Also, every cut of any cycle formed by inserting $v$ into an edge of $C$ reaches one of these paths by moving the cut to an edge at $v$.
+
+If the endpoints of $P$ are adjacent, apply this observation to its closing cycle. Otherwise, compare any two lifts. In the closure count of Lemma 1 there are at least $2\delta(H)-(m-1)\ge3$ witnesses. Choose a witness whose cut avoids both insertion edges, ignoring a lift that appends $v$ when listing these edges. For an internal insertion, the same closing backbite works on the lifted path and yields a cut of the cycle with $v$ inserted. For an appended $v$, perform the closing backbite from the other endpoint of the underlying path. This leaves $v$ appended to a cut of the closing cycle. Both choices of direction give the same underlying cycle in $H$, so the preceding observation connects the two lifts.
+
+Now take adjacent paths $P,Q$ in $R(H)$. If $d=|N_J(v)\cap V(H)|$, then $P$ has at least $2d-m-1\ge2$ internal gaps with both ends adjacent to $v$. Indeed, the $d$ marked positions form at most $m-d+1$ runs. Choose such a gap other than the edge deleted by the move $P\to Q$. Inserting $v$ in that gap before and after the move gives adjacent lifts. Connectivity of $R(H)$ puts all lifts in one component of $R(J)$. Finally $J$ is Dirac. Close any path in $J$ by Lemma 1 and move the cut to an edge incident with $v$. The resulting path is an appended lift. This proves the lemma.
+
+## 3. Connectivity of a large balanced blow-up
+
+Write $F(t)$ for the graph obtained by replacing each vertex of $F$ by $t$ independent vertices (its *type*) and each edge by a complete bipartite graph between its types.
+
+**Lemma 3.** Let $r\ge4$ be even and let $F$ have $r$ vertices and $\delta(F)\ge r/2+1$. For every sufficiently large $t$ depending only on $r$, $R(F(t))$ is connected.
+
+A Hamiltonian cycle in $F(t)$ projects to a closed walk of types. Its edge multiplicities give a connected multigraph $M$ supported on $F$, of degree $2t$ at every type. Conversely, an Euler tour of any such $M$ visits each type $t$ times in cyclic order. Giving those visits distinct vertex labels within their type lifts the tour to a Hamiltonian cycle of $F(t)$.
+
+**Fixed multiplicities.** All cycles with the same $M$ belong to one component. Use the Euler-tour transformation theorem of Abrham and Kotzig for arbitrary Eulerian multigraphs. Its operation reverses the subtrail between two visits to the same vertex. One can distinguish parallel edges when applying the theorem. On a lifted cycle reverse the interval including its two end vertices of the same type. The two new boundary edges are available because these vertices have identical neighbourhoods. This is a cycle 2-opt, or has no effect. Labels can also be adjusted arbitrarily. To transpose two labels of the same type, reverse that inclusive interval and then reverse its interior alone. Both reversals are valid for the same neighbourhood reason, including trivial intervals. Their composition swaps just the two labels. [Abrham and Kotzig, *Transformations of Euler Tours*, 1980](https://doi.org/10.1016/S0167-5060(08)70852-5)
+
+**A common target.** Each edge $e=uv$ of $F$ belongs to a perfect matching. Indeed, $F-\{u,v\}$ has even order and minimum degree at least $(r-2)/2$, so has a perfect matching by Dirac's theorem (also directly if its order is two). Add $e$. For each $e$ take $r+1$ copies of such a matching, with every edge doubled. Their sum has degree $2(r+1)|E(F)|$ at every type. For any $t\ge(r+1)|E(F)|$ fill the remaining degree with copies of a doubled perfect matching. This gives a target $M_*$ with degree $2t$ and multiplicity at least $2r+2$ on every edge of $F$.
+
+**One exchange.** If $M\ne M_*$, colour excess edge copies of $M$ red and missing copies blue. Red and blue degrees agree at each type. Pair unlike incidences at each type to get closed alternating trails. Choose a shortest nonempty alternating closed subtrail, allowing a cyclic choice of its start. It has length $2k\le 2r$, since repeating a type at the same parity before the end would give a shorter nonempty alternating closed subtrail. List its red edges as $a_i b_i$ and its blue edges as $b_i a_{i+1}$ with indices cyclic, $1\le i\le k$. A type pair cannot be both colours, so $k\ge2$.
+
+Remove **two** copies of each listed red edge from $M$, counting repeated requests separately. Every affected type pair had multiplicity greater than its target, hence greater than $2r+2$. Even after these temporary removals its multiplicity is positive. The remaining multigraph is connected, spanning and even. In an Euler tour of this remainder, reinsert the two copies for each $i$ as the excursion $a_i,b_i,a_i$ at a visit to $a_i$. Excursions may be inserted successively at the same visit. Lift the resulting tour to a labelled cycle. By the fixed-multiplicities argument it is in the component of the original cycle.
+
+The occurrence of $b_i$ in each excursion is a distinct labelled vertex, flanked by two vertices of type $a_i$. Cut one edge from the first such centre $b_1$ to its flank of type $a_1$. Keep that flank as the fixed endpoint. For $i=2,\ldots,k$, the free endpoint has type $b_{i-1}$. In the path oriented from it, the as-yet untouched centre $b_i$ still has both flanks of type $a_i$. Bite to the flank **immediately after** that centre. This is a blue edge and it deletes the edge from the centre to that flank, exposing precisely $b_i$. It is legal even when the flank is the fixed endpoint. Different excursions can share a flank, but none of these moves cuts an edge of an unprocessed centre. Finally close from $b_k$ to the fixed endpoint of type $a_1$. We have reached a representative of a cycle with one copy of each listed red edge replaced by its listed blue edge. No other multiplicity changed. This strictly decreases $\sum_e |M(e)-M_*(e)|$. Repeating reaches $M_*$.
+
+All cycles are therefore in one component, and $F(t)$ is Dirac, so Lemma 1 covers all paths. This proves Lemma 3.
+
+## 4. Finding a core that can be extended to the whole graph
+
+We give the sampling argument with its dependencies since a dense blow-up in an arbitrary location would not by itself justify adding all the other vertices.
+
+It suffices to take $0<\varepsilon\le1/4$. Put $\gamma=\varepsilon/16$. We choose in order an even constant $r$, a constant $t$, and finally $n$ sufficiently large in terms of both. Write $s=rt$. We use the standard Hoeffding bound for a sum of $j$ zero-one samples, independently or uniformly without replacement. A deviation below the mean by $uj$ has probability at most $\exp(-2u^2 j)$. [Hoeffding, *Probability Inequalities for Sums of Bounded Random Variables*, Theorems 1 and 4](https://doi.org/10.1080/01621459.1963.10500830)
+
+Choose $r$ independent uniformly random vertices of $G$ as an ordered tuple. Call a tuple good if its entries are distinct, its induced graph has minimum degree at least $(1/2+8\gamma)r$, and at most $\gamma^2 n$ host vertices see fewer than $(1/2+8\gamma)r$ of its entries. For a fixed host vertex the number of neighbours sampled has mean at least $(1/2+16\gamma)r$. The expected exceptional fraction is at most $\exp(-2(8\gamma)^2 r)$. Markov's inequality makes the probability that the fraction exceeds $\gamma^2$ less than $1/8$ for large $r$. Conditional on any one sampled entry, its neighbours among the other $r-1$ entries have mean at least $(1/2+16\gamma)(r-1)$. A union bound over $r$ entries makes the probability of failure of the degree condition on distinct tuples less than $1/8$ for large $r$. The collision probability is at most $\binom r2/n$. In particular at least half of all tuples are good. Also choose $r$ so $8\gamma r\ge1$.
+
+By pigeonholing the good tuples by their labelled graph, there is an $F$ for which the collection $D$ of good tuples inducing $F$ has size at least $p n^r$, where $p=2^{-1-\binom r2}$. For any fixed $t$, there are disjoint sets $B_1,\ldots,B_r$, each of size $t$, with every ordered transversal in $D$, once $n$ is large enough. Here is a counting proof. Initially a random point of $[n]^r$ belongs to $D$ with probability at least $p$. Replace one coordinate by $t$ independent choices and require success for all choices and all previously formed transversals. Conditional on the other arrays, if the old success probability is $q$, the new one is $q^t$. Jensen's inequality raises the previous lower bound to its $t$-th power. Repeating for every coordinate gives probability at least $p^{t^r}$. The probability of any repetition among all $rt$ samples is at most $\binom{rt}{2}/n$. Take $n$ large enough that the latter is smaller.
+
+Let $B=\bigcup_i B_i$. Every edge of $F$ gives a complete bipartite pair of sets, so $G[B]$ contains a spanning $F(t)$ with $\delta(F)\ge r/2+1$. Choose $t\ge(r+1)\binom r2$. Lemmas 3 and 1 give connected $R(G[B])$. Every vertex in $B$ sees at least $(1/2+8\gamma)s$ vertices of $B$.
+
+Let $Q$ consist of vertices outside $B$ with fewer than $(1/2+4\gamma)s$ neighbours in $B$. For any $z\in Q$, a random transversal sees on average fewer than $(1/2+4\gamma)r$ neighbours of $z$. By Markov's inequality the probability that it sees fewer than $(1/2+8\gamma)r$ is at least $1-(1/2+4\gamma)/(1/2+8\gamma)\ge4\gamma$. On each transversal at most $\gamma^2 n$ vertices are exceptional. Double counting gives $|Q|\le\gamma n/4$. Put $W=V(G)\setminus(B\cup Q)$. Every vertex of $B\cup W$ sees at least $(1/2+4\gamma)s$ vertices in $B$. Every host vertex has at least $(1/2+12\gamma)|W|$ neighbours in $W$, since deleting $B\cup Q$ loses at most $s+\gamma n/4$ neighbours and $s$ is constant.
+
+Take a random ordering of $W$, with first $j$ vertices $W_j$. There is an ordering such that for every $\gamma s\le j\le |W|$, each vertex of $B\cup W_j$ and also the next vertex if present has at least $(1/2+4\gamma)j$ neighbours in $W_j$. To verify the simultaneous assertion, for a vertex specified by its position in the ordering condition on its identity. For a position among the first $j$, the other $j-1$ entries are a uniform sample of $W$ minus that vertex. For the next position all $j$ are such a sample. For a vertex of $B$ there is no conditioning. The means in all cases are at least $(1/2+12\gamma)(j-1)$. For $j\ge\gamma s$ and sufficiently large $s$, the failure probability per position is at most $\exp(-\gamma^2 j)$ by the sampling bound. The union bound is at most
+
+$$\sum_{j\ge\lceil\gamma s\rceil}(s+j+1)\exp(-\gamma^2 j)<1$$
+
+by increasing $t$ as a function of $r,\gamma$ **before** choosing $n$. Thus no union bound over $n$ arbitrary future vertices at a short prefix is needed.
+
+For $j\ge\gamma s$, the current vertices and the next vertex have at least $(1/2+4\gamma)(s+j)$ neighbours in $B\cup W_j$. For $j<\gamma s$ their neighbours in $B$ alone number at least $(1/2+4\gamma)s>(s+j)/2+3$ once $s$ is large. Consequently at every addition the current graph and the new vertex meet both degree requirements of Lemma 2. After adding $W$, restore $Q$ in any order. At every such prefix and for its next vertex, the original degree has fallen by at most $|Q|\le\gamma n/4$, which again leaves more than half the current order plus three. Lemma 2 now gives connectivity on all of $G$. This proves the theorem.
+
+## 5. A quantitative consequence
+
+For all sufficiently large $n$ it suffices that
+
+$$\delta(G)\ \ge\ \frac n2 + K n\,\frac{\log\log\log n}{\sqrt{\log\log n}}$$
+
+for an absolute constant $K$. To see the dependence, take $r$ to be the least even integer above $A\gamma^{-2}\log(1/\gamma)$ for a sufficiently large absolute $A$, and take $t=r^3$, $s=r^4$. These choices meet the sampling bounds in Section 4. In the prefix union bound, the tail is at most a constant times $(s\gamma^{-2}+\gamma^{-4})\exp(-\gamma^3 s)$, which is less than one. The condition $\binom{s}{2}/n<p^{t^r}$ for finding the core, together with the other lower bounds on $n$, holds whenever
+
+$$\log\log n \ \ge\ C\gamma^{-2}\log^2(1/\gamma)$$
+
+for a sufficiently large absolute $C$, since $\log(t^r)=3r\log r$. Now substitute $\gamma=(K/16)\log\log\log n/\sqrt{\log\log n}$ and increase $K$ if necessary. This gives the displayed degree bound. The argument still requires a growing additive surplus. Whether a fixed surplus, or zero surplus, suffices for every order is open here.
